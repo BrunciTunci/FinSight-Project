@@ -2,6 +2,7 @@ import type { ApiError, Account, AuthResponse, Health, StockQuote, Transaction, 
 
 const TOKEN_KEY = 'finsight_token'
 const USERNAME_KEY = 'finsight_username'
+const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? ''
 
 export const auth = {
   getToken: () => localStorage.getItem(TOKEN_KEY),
@@ -28,7 +29,7 @@ async function request<T>(path: string, init?: RequestInit, requiresAuth = true)
     if (token) headers['Authorization'] = `Bearer ${token}`
   }
 
-  const res = await fetch(path, { ...init, headers })
+  const res = await fetch(`${BASE_URL}${path}`, { ...init, headers })
 
   if (!res.ok) {
     let message = `Request failed: ${res.status} ${res.statusText}`
